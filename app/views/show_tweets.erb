@@ -1,7 +1,8 @@
-<div class = "container">
-  <ul id = "tweets">
-    <% @tweets.each do |tweet| %>
-      <li><%= tweet.text %></li>
+<div class = "container" data-status="<%=@tweets.last%>">
+  <ul id = "tweets" >
+    <% (@tweets.length - 1).times do |i| %>
+      <li><%= @tweets[i].text %></li>
     <% end %>
+
   </ul>
 </div>
