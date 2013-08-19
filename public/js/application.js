@@ -1,7 +1,31 @@
 $(document).ready(function() {
-  // This is called after the document has loaded in its entirety
-  // This guarantees that any elements we bind to will exist on the page
-  // when we try to bind to them
+  $('img').hide();
+  $('#our-button').on('click', function(event) {
+    $('img').show();
+    event.preventDefault();
 
-  // See: http://docs.jquery.com/Tutorials:Introducing_$(document).ready()
+    var username = $('input[name="user"]').val();
+    var url = '/' + username;
+    var that = this;
+
+    $.get(url, username, function(tweetHTML){
+      
+      $('img').next().hide()
+      $('img').after(tweetHTML);
+      
+      if(($('img').next().data('status')) == 1){
+        $('img').hide();
+      }
+      else {
+        $.post(('/secondtry' + url), function(newTweetHTML) {
+          $('img').next().hide();
+          $('img').after(newTweetHTML);
+          $('img').hide();
+
+        });
+      }
+
+      
+    });
+  });
 });

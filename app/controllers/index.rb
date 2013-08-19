@@ -10,16 +10,44 @@ get '/:username' do
   end
 
   @user = TwitterUser.find_by_username(params[:username])
-  if @user.tweets_stale?
-    @user.fetch_tweets!
-  end
+  
 
   @tweets = @user.tweets.last(10)
 
-  erb :show_tweets
+  if @user.tweets_stale?
+    @tweets << 0
+  else
+    @tweets << 1
+  end
+  
+   if request.xhr?
+    erb :show_tweets, layout: false
+   else 
+    erb :show_tweets
+  end
+  
 end
 
 post '/' do
-  redirect "/#{params[:user]}"
+  # redirect "/#{params[:user]}"
+end
+
+post '/secondtry/:username' do
+  user = TwitterUser.find_by_username(params[:username])
+  user.fetch_tweets!
+
+  puts user.username
+  puts user.tweets
+
+
+
+  @tweets = user.tweets.limit(10) 
+  @tweets << 5
+
+  puts @tweets
+
+  if request.xhr?
+    erb :show_tweets, layout: false
+  end
 end
 
