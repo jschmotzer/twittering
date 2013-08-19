@@ -5,16 +5,16 @@ get '/' do
 end
 
 get '/:username' do
-  # unless TwitterUser.find_by_username(params[:username])
-  #   TwitterUser.create(username: params[:username])
-  # end
+  unless TwitterUser.find_by_username(params[:username])
+    TwitterUser.create(username: params[:username])
+  end
 
-  # @user = TwitterUser.find_by_username(params[:username])
-  # if @user.tweets_stale?
-  #   @user.fetch_tweets!
-  # end
+  @user = TwitterUser.find_by_username(params[:username])
+  if @user.tweets_stale?
+    @user.fetch_tweets!
+  end
 
-  @tweets = TwitterUser.first.tweets.last(10)
+  @tweets = @user.tweets.last(10)
   
    if request.xhr?
     erb :show_tweets, layout: false

@@ -1,6 +1,6 @@
 $(document).ready(function() {
   $('img').hide();
-  $('#our-button').on('click', function(event) {
+  $('#our-button').on('submit', function(event) {
     $('img').show();
     event.preventDefault();
 
@@ -8,8 +8,8 @@ $(document).ready(function() {
     var url = '/' + username;
     var that = this;
     $.get(url, username, function(tweetHTML){
-      console.log(that);
-      $('body').append(tweetHTML);
+      $('form').next().hide()
+      $('form').after(tweetHTML);
       $('img').hide();
     });
   });
