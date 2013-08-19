@@ -5,8 +5,16 @@ get '/' do
 end
 
 get '/:username' do
-  client = twitter_client
-  @tweets = client.user_timeline(params[:username],{count: 10})
+  unless TwitterUser.find_by_username(params[:username])
+    TwitterUser.create(username: params[:username])
+  end
+
+  @user = TwitterUser.find_by_username(params[:username])
+  if @user.tweets_stale?
+    @user.fetch_tweets!
+  end
+
+  @tweets = @user.tweets.last(10)
 
   erb :show_tweets
 end
